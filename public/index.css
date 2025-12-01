@@ -1,0 +1,50 @@
+body {
+    background-color: bisque;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Lucida Sans', sans-serif;
+}
+
+.usuClave {
+    width: 300px;
+    padding: 20px;
+    background-color: lightcoral;
+    text-align: left; /* para que labels e inputs se alineen a la izquierda */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column; /* organiza elementos verticalmente */
+    gap: 10px; /* espacio entre label y input */
+}
+
+.usuClave label {
+    font-weight: bold;
+}
+
+.usuClave input[type="text"],
+.usuClave input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.usuClave input[type="button"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f08080;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.usuClave input[type="button"]:hover {
+    background-color: #e06666;
+}
+

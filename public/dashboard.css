@@ -1,0 +1,73 @@
+/* dashboard.css */
+
+/* Estilo general del body */
+body {
+font-family: Arial, sans-serif; /* Fuente legible */
+background-color: bisque; /* Color de fondo suave */
+margin: 0;
+padding: 20px;
+}
+
+/* Encabezados */
+h2, h3 {
+text-align: center;
+color: #333;
+}
+
+/* Nombre del usuario en el h2 */
+#nombreUsuario {
+color: #007BFF; /* Azul llamativo */
+}
+
+/* Contenedor de enlaces */
+#listaEnlaces {
+margin: 20px auto;
+max-width: 400px;
+display: flex;
+flex-direction: column;
+gap: 10px; /* Espacio entre enlaces */
+}
+
+/* Estilo de cada enlace */
+#listaEnlaces a {
+display: block;
+text-decoration: none;
+padding: 10px;
+border-radius: 5px;
+background-color: #fff;
+color:black;
+transition: all 0.3s ease;
+text-align: center;
+}
+
+/* Hover solo si el enlace está habilitado */
+#listaEnlaces a:hover {
+background-color: lightcoral;
+color: white;
+}
+
+/* Estilo para enlaces deshabilitados */
+#listaEnlaces a[style*="pointer-events: none"] {
+background-color: #e0e0e0;
+color: gray;
+border-color: gray;
+cursor: not-allowed;
+}
+
+/* Botón de cerrar sesión */
+button {
+display: block;
+margin: 30px auto;
+padding: 10px 20px;
+font-size: 16px;
+border-radius: 5px;
+border: none;
+background-color:lightcoral;
+color: white;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+button:hover {
+background-color: #e06666;
+}
