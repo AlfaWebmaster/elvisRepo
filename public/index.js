@@ -68,3 +68,9 @@ async function loginUsuario() {
     }
 }
 
+//Funcion para iniciar sesion presionando enter
+document.addEventListener('keydown', function(event){
+    if(event.key === 'Enter'){
+        loginUsuario();
+    }
+})
