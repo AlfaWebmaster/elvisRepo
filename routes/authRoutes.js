@@ -1,41 +1,23 @@
 // =============================================
-// authRoutes.js - Login funcional (texto plano)
+// authRoutes.js - Login funcional (con depuración)
 // =============================================
 
-// Importo express porque necesito usar su router.
-// El router me permite agrupar rutas relacionadas con la autenticación.
 const express = require('express');
-
-// Importo mi modelo User, que representa la colección "usuarios" en MongoDB.
-// Gracias a este modelo puedo buscar usuarios, validar datos, etc.
-const User = require('../models/user'); // modelo User de MongoDB
-
-// Creo una instancia del router de Express.
-// Aquí dentro coloco todas las rutas relacionadas con la autenticación.
+const User = require('../models/user'); // Modelo User de MongoDB
 const router = express.Router();
-
-//Importo la libreria jsonWebToken para generar mis tokens JWT y los gurado en jwt
 const jwt = require('jsonwebtoken');
-
-//Cargo las variables de entorno de mi fichero .env(jwt_secret y jwt_expere)
 require('dotenv').config();
 
-// Defino la ruta POST:
 // POST /api/auth/login
-// Esta ruta recibe usuario y contraseña desde el frontend.
-// La comparo con los datos de la base de datos para validar el login.
-// --------------------------------------------------------------
 router.post('/login', async (req, res) => {
     try {
-        // Extraigo username y password que el frontend envía por JSON desde el body.
+        // Extraigo username y password enviados por frontend
         const { username, password } = req.body;
 
-        // Estos console.log me sirven para ver en mi consola del servidor
-        // si los datos están llegando correctamente.
-        //console.log("Usuario recibido:", username);
-        //console.log("Contraseña recibida:", password);
+        // Logs para depuración: qué llega al backend
+        console.log('Datos recibidos en backend:', { username, password });
 
-        // Antes de buscar en la base de datos, verifico si llegaron vacíos.
+        // Verifico que los campos no estén vacíos
         if (!username || !password) {
             return res.status(400).json({
                 success: false,
@@ -43,33 +25,37 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // Busco el usuario en la base de datos.
-        // Uso .trim() por si vienen espacios accidentales.
-        // User.findOne() revisa la colección "usuarios" gracias al modelo User.
-        const user = await User.findOne({
-            usuario: username.trim(),
-            clave: password.trim()
-        });
+        // 🔹 Buscar solo por usuario, no por contraseña
+        // Esto evita fallos si hay espacios o codificación diferente
+        const user = await User.findOne({ usuario: username.trim() });
 
-        // Imprimo qué resultado devolvió la base de datos.
-        //console.log("Usuario encontrado:", user);
+        // Log del usuario encontrado
+        console.log('Usuario encontrado en DB:', user);
 
-        // Si no encuentro usuario, devuelvo un error de credenciales.
         if (!user) {
             return res.json({
                 success: false,
-                message: "Credenciales incorrectas"
+                message: "Usuario no encontrado"
             });
         }
 
-        //Genero el token jwt con los datos de la busqueda User.FindONE gurdado en  al variable user
-        const payload = { id: user._id, usuario: user.usuario};
-        const token = jwt.sign(payload, process.env.jwt_secret, {expiresIn: process.env.jwt_expire});
+        // 🔹 Comparación de contraseña con logs de depuración
+        console.log('Contraseña recibida del frontend:', JSON.stringify(password));
+        console.log('Contraseña almacenada en DB:', JSON.stringify(user.clave));
+        console.log('Comparación exacta:', user.clave === password.trim());
 
-        
+        if (user.clave !== password.trim()) {
+            return res.json({
+                success: false,
+                message: 'Contraseña incorrecta'
+            });
+        }
 
-        // Si llego aquí, el usuario existe y las credenciales son correctas.
-        // Devuelvo al frontend un JSON con los datos permitidos del usuario y el token.
+        // Generar token JWT
+        const payload = { id: user._id, usuario: user.usuario };
+        const token = jwt.sign(payload, process.env.jwt_secret, { expiresIn: process.env.jwt_expire });
+
+        // Enviar respuesta al frontend
         return res.json({
             success: true,
             message: "Login correcto",
@@ -83,8 +69,6 @@ router.post('/login', async (req, res) => {
         });
 
     } catch (error) {
-        // Si ocurre cualquier error inesperado (DB caída, problema interno),
-        // lo capturo aquí y devuelvo un mensaje al frontend.
         console.error("Error en servidor:", error);
         return res.status(500).json({
             success: false,
@@ -93,6 +77,4 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Exporto el router para poder usarlo en server.js con:
-// app.use('/api/auth', authRoutes);
 module.exports = router;
