@@ -10,17 +10,21 @@ const userSchema = new mongoose.Schema({
 
     // Este es el campo del nombre de usuario que uso en el login.
     // En la base de datos existe exactamente igual.
-    usuario: String,
+    usuario: {type: String, required: true},
 
     // Esta es la contraseña. Más adelante la cifraré, pero ahora mismo la guardo como texto.
-    clave: String,
+    clave: {type: String, required: true},
 
     // Este es el nombre real del usuario, lo saco en el login para mostrar un saludo.
-    nombre: String,
+    nombre: {type: String, required: true},
 
     // Estos dos campos son booleanos y me servirán para dar permisos a ciertas partes del frontend.
-    link1: Boolean,
-    link2: Boolean
+    //link1: Boolean,
+    //link2: Boolean
+
+    //Campo modificado a Array
+    permisos: [{type: String}] //Array que contiene string de los links1 al link4
+    
 
 // Aquí le especifico explícitamente el nombre de la colección donde están los usuarios.
 // MongoDB por defecto pluraliza los nombres, pero yo quiero que use “usuarios” tal cual,

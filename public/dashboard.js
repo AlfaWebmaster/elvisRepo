@@ -43,7 +43,7 @@ async function cargarEnlaces() {
 
                 // Verificamos si el usuario tiene permiso
                 // item.permiso debe coincidir con la propiedad en datosUsuario
-                if (!datosUsuario[item.permiso]) {
+                if (!datosUsuario.permisos.includes(item.permiso)) {
                     // Si no tiene permiso, deshabilitamos el enlace
                     a.style.pointerEvents = 'none'; // no se puede hacer click
                     a.style.color = 'gray';         // gris para indicar deshabilitado
